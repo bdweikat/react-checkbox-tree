@@ -17,6 +17,7 @@ class CheckboxTree extends React.Component {
         nodes: PropTypes.arrayOf(nodeShape).isRequired,
 
         checked: listShape,
+        checkedParents: listShape,
         disabled: PropTypes.bool,
         expandDisabled: PropTypes.bool,
         expandOnClick: PropTypes.bool,
@@ -36,10 +37,12 @@ class CheckboxTree extends React.Component {
         onCheck: PropTypes.func,
         onClick: PropTypes.func,
         onExpand: PropTypes.func,
+        onToggleSelection: PropTypes.func,
     };
 
     static defaultProps = {
         checked: [],
+        checkedParents: [],
         disabled: false,
         expandDisabled: false,
         expandOnClick: false,
@@ -74,6 +77,7 @@ class CheckboxTree extends React.Component {
         onCheck: () => {},
         onClick: null,
         onExpand: () => {},
+        onToggleSelection: () => {},
     };
 
     constructor(props) {
@@ -84,6 +88,7 @@ class CheckboxTree extends React.Component {
         model.deserializeLists({
             checked: props.checked,
             expanded: props.expanded,
+            checkedParents: props.checkedParents
         });
 
         this.state = {
@@ -97,6 +102,7 @@ class CheckboxTree extends React.Component {
         this.onNodeClick = this.onNodeClick.bind(this);
         this.onExpandAll = this.onExpandAll.bind(this);
         this.onCollapseAll = this.onCollapseAll.bind(this);
+        this.onToggleSelection = this.onToggleSelection.bind(this);
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -119,6 +125,7 @@ class CheckboxTree extends React.Component {
         model.deserializeLists({
             checked: newProps.checked,
             expanded: newProps.expanded,
+            checkedParents: newProps.checkedParents
         });
 
         return newState;
@@ -140,6 +147,15 @@ class CheckboxTree extends React.Component {
 
         model.toggleNode(nodeInfo.value, 'expanded', nodeInfo.expanded);
         onExpand(model.serializeList('expanded'), { ...node, ...nodeInfo });
+    }
+
+    onToggleSelection(nodeInfo) {
+        const {onToggleSelection, onCheck} = this.props;
+        const model = this.state.model.clone();
+        const node = model.getNode(nodeInfo.value);
+        model.toggleNode(nodeInfo.value, 'checkedParents', nodeInfo.checkedParents);
+        model.toggleChecked(nodeInfo, nodeInfo.checkedParents, false, true);
+        onToggleSelection(model.serializeList('checkedParents'),model.serializeList('checked'), { ...node, ...nodeInfo },  { ...node, ...nodeInfo })
     }
 
     onNodeClick(nodeInfo) {
@@ -219,7 +235,6 @@ class CheckboxTree extends React.Component {
             // This is done during rendering as to avoid an additional loop during the
             // deserialization of the `checked` property
             flatNode.checkState = this.determineShallowCheckState(node, noCascade);
-
             // Show checkbox only if this is a leaf node or showCheckbox is true
             const showCheckbox = onlyLeafCheckboxes ? flatNode.isLeaf : flatNode.showCheckbox;
 
@@ -234,6 +249,7 @@ class CheckboxTree extends React.Component {
                 <TreeNode
                     key={key}
                     checked={flatNode.checkState}
+                    checkedParents={flatNode.checkedParents}
                     className={node.className}
                     disabled={flatNode.disabled}
                     expandDisabled={expandDisabled}
@@ -253,6 +269,7 @@ class CheckboxTree extends React.Component {
                     treeId={id}
                     value={node.value}
                     onCheck={this.onCheck}
+                    onToggleSelection={this.onToggleSelection}
                     onClick={onClick && this.onNodeClick}
                     onExpand={this.onExpand}
                 >

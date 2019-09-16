@@ -68,7 +68,7 @@ class NodeModel {
     }
 
     deserializeLists(lists) {
-        const listKeys = ['checked', 'expanded'];
+        const listKeys = ['checked', 'expanded', 'checkedParents'];
 
         // Reset values to false
         Object.keys(this.flatNodes).forEach((value) => {
@@ -109,7 +109,7 @@ class NodeModel {
         return this;
     }
 
-    toggleChecked(node, isChecked, noCascade) {
+    toggleChecked(node, isChecked, noCascade, toggleParent = false) {
         const flatNode = this.flatNodes[node.value];
 
         if (flatNode.isLeaf || noCascade) {
@@ -122,8 +122,12 @@ class NodeModel {
         } else {
             // Percolate check status down to all children
             flatNode.children.forEach((child) => {
-                this.toggleChecked(child, isChecked, noCascade);
+                this.toggleChecked(child, isChecked, noCascade, toggleParent);
             });
+            if(toggleParent){
+                this.toggleNode(node.value, 'checked', isChecked);
+                this.toggleNode(node.value, 'checkedParents', isChecked);
+            }
         }
 
         return this;
@@ -131,7 +135,6 @@ class NodeModel {
 
     toggleNode(nodeValue, key, toggleValue) {
         this.flatNodes[nodeValue][key] = toggleValue;
-
         return this;
     }
 }

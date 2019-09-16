@@ -9,6 +9,7 @@ import languageShape from './shapes/languageShape';
 
 class TreeNode extends React.Component {
     static propTypes = {
+        checkedParents: PropTypes.bool.isRequired,
         checked: PropTypes.number.isRequired,
         disabled: PropTypes.bool.isRequired,
         expandDisabled: PropTypes.bool.isRequired,
@@ -53,6 +54,7 @@ class TreeNode extends React.Component {
         super(props);
 
         this.onCheck = this.onCheck.bind(this);
+        this.onToggleSelection = this.onToggleSelection.bind(this);
         this.onClick = this.onClick.bind(this);
         this.onExpand = this.onExpand.bind(this);
     }
@@ -77,6 +79,14 @@ class TreeNode extends React.Component {
         }
 
         onClick({ value, checked: this.getCheckState({ toggle: false }) });
+    }
+    onToggleSelection() {
+        const {
+            onToggleSelection,
+            checkedParents,
+            value
+        } = this.props;
+        onToggleSelection({ value, checkedParents: !checkedParents })
     }
 
     onExpand() {
@@ -126,6 +136,18 @@ class TreeNode extends React.Component {
             >
                 {this.renderCollapseIcon()}
             </Button>
+        );
+    }
+
+    renderIncludeLoationsLabel() {
+        const { isLeaf, checkedParents } = this.props;
+
+        if (isLeaf) {
+            return null;
+        }
+
+        return (
+            <span className="rtc-children-selection" onClick={this.onToggleSelection}> {!checkedParents ? "(Select all children)" : "(Deselect all children)"}</span>
         );
     }
 
@@ -295,6 +317,7 @@ class TreeNode extends React.Component {
                 <span className="rct-text">
                     {this.renderCollapseButton()}
                     {this.renderLabel()}
+                    {this.renderIncludeLoationsLabel()}
                 </span>
                 {this.renderChildren()}
             </li>
