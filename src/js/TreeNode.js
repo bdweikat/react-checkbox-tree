@@ -140,14 +140,14 @@ class TreeNode extends React.Component {
     }
 
     renderIncludeLoationsLabel() {
-        const { isLeaf, checkedParents } = this.props;
+        const { isLeaf, cascadeChecked } = this.props;
 
         if (isLeaf) {
             return null;
         }
-
+        const allChildrenChecked = cascadeChecked === 1;
         return (
-            <span className="rtc-children-selection" onClick={this.onToggleSelection}> {!checkedParents ? "(Select all children)" : "(Deselect all children)"}</span>
+            <span className="rtc-children-selection" onClick={this.onToggleSelection}> {!allChildrenChecked ? "(Select all children)" : "(Deselect all children)"}</span>
         );
     }
 

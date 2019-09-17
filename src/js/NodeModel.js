@@ -126,7 +126,7 @@ class NodeModel {
             });
             if(toggleParent){
                 this.toggleNode(node.value, 'checked', isChecked);
-                this.toggleNode(node.value, 'checkedParents', isChecked);
+                //this.toggleNode(node.value, 'checkedParents', isChecked);
             }
         }
 

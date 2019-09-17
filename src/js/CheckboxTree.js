@@ -138,6 +138,20 @@ class CheckboxTree extends React.Component {
 
         model.toggleChecked(nodeInfo, nodeInfo.checked, noCascade);
         onCheck(model.serializeList('checked'), { ...node, ...nodeInfo });
+
+        if(!nodeInfo.checked){
+            //Deselected one of the items
+            if(!node.isLeaf){
+                model.toggleChecked(nodeInfo, false, false, false);
+            }
+            let hasParentNode = node.isParent;
+            let parentNode = node.parent;
+            while(hasParentNode){
+                model.toggleChecked(parentNode, false, false, false);
+                hasParentNode = parentNode.isParent;
+                parentNode = parentNode.parent;
+            }
+        }
     }
 
     onExpand(nodeInfo) {
@@ -150,11 +164,12 @@ class CheckboxTree extends React.Component {
     }
 
     onToggleSelection(nodeInfo) {
-        const {onToggleSelection, onCheck} = this.props;
+        const {onToggleSelection} = this.props;
         const model = this.state.model.clone();
         const node = model.getNode(nodeInfo.value);
-        model.toggleNode(nodeInfo.value, 'checkedParents', nodeInfo.checkedParents);
-        model.toggleChecked(nodeInfo, nodeInfo.checkedParents, false, true);
+        //model.toggleNode(nodeInfo.value, 'checkedParents', nodeInfo.checkedParents);
+        const allChildrenChecked = this.isEveryChildChecked(node);
+        model.toggleChecked(nodeInfo, !allChildrenChecked, false, true);
         onToggleSelection(model.serializeList('checkedParents'),model.serializeList('checked'), { ...node, ...nodeInfo },  { ...node, ...nodeInfo })
     }
 
@@ -184,7 +199,7 @@ class CheckboxTree extends React.Component {
         );
     }
 
-    determineShallowCheckState(node, noCascade) {
+        determineShallowCheckState(node, noCascade) {
         const flatNode = this.state.model.getNode(node.value);
 
         if (flatNode.isLeaf || noCascade) {
@@ -235,6 +250,7 @@ class CheckboxTree extends React.Component {
             // This is done during rendering as to avoid an additional loop during the
             // deserialization of the `checked` property
             flatNode.checkState = this.determineShallowCheckState(node, noCascade);
+            flatNode.cascadeCheckState = this.determineShallowCheckState(node, false);
             // Show checkbox only if this is a leaf node or showCheckbox is true
             const showCheckbox = onlyLeafCheckboxes ? flatNode.isLeaf : flatNode.showCheckbox;
 
@@ -249,6 +265,7 @@ class CheckboxTree extends React.Component {
                 <TreeNode
                     key={key}
                     checked={flatNode.checkState}
+                    cascadeChecked={flatNode.cascadeCheckState}
                     checkedParents={flatNode.checkedParents}
                     className={node.className}
                     disabled={flatNode.disabled}
