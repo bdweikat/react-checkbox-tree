@@ -26,9 +26,6 @@ gulp.task('test-script-format', () => (
         './test/**/*.js',
         './*.js',
     ])
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failOnError())
 ));
 
 gulp.task('test-script-mocha', () => (
@@ -59,8 +56,6 @@ gulp.task('build-script-web', gulp.series('build-script', () => (
 
 gulp.task('build-style', () => (
     gulp.src('./src/scss/**/*.scss')
-        .pipe(scsslint())
-        .pipe(scsslint.failReporter())
         .pipe(sass({
             outputStyle: 'expanded',
         }).on('error', sass.logError))
@@ -98,8 +93,6 @@ function buildExamplesScript(mode = 'development') {
 
 function buildExamplesStyle(minifyStyles = false) {
     let stream = gulp.src('./examples/src/scss/**/*.scss')
-        .pipe(scsslint())
-        .pipe(scsslint.failReporter())
         .pipe(sass({
             outputStyle: 'expanded',
         }).on('error', sass.logError))
