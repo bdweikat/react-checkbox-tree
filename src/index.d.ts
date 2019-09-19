@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-declare module "react-checkbox-tree" {
+declare module "@r365/react-checkbox-tree" {
     interface Node {
         label: JSX.Element;
         value: string;
