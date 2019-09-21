@@ -141,11 +141,11 @@ class CheckboxTree extends React.Component {
 
         if(!nodeInfo.checked){
             //Deselected one of the items
-            if(!node.isLeaf){
+            if(node && !node.isLeaf){
                 model.toggleChecked(nodeInfo, false, false, false);
             }
-            let hasParentNode = node.isParent;
-            let parentNode = node.parent;
+            let hasParentNode = node && node.isParent;
+            let parentNode = node && node.parent;
             while(hasParentNode){
                 model.toggleChecked(parentNode, false, false, false);
                 hasParentNode = parentNode.isParent;
