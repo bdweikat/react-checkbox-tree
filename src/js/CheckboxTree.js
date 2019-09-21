@@ -202,7 +202,7 @@ class CheckboxTree extends React.Component {
         determineShallowCheckState(node, noCascade) {
         const flatNode = this.state.model.getNode(node.value);
 
-        if (flatNode.isLeaf || noCascade) {
+        if ((flatNode && flatNode.isLeaf) || noCascade) {
             return flatNode.checked ? 1 : 0;
         }
 
@@ -252,7 +252,7 @@ class CheckboxTree extends React.Component {
             flatNode.checkState = this.determineShallowCheckState(node, noCascade);
             flatNode.cascadeCheckState = this.determineShallowCheckState(node, false);
             // Show checkbox only if this is a leaf node or showCheckbox is true
-            const showCheckbox = onlyLeafCheckboxes ? flatNode.isLeaf : flatNode.showCheckbox;
+            const showCheckbox = onlyLeafCheckboxes ? (flatNode && flatNode.isLeaf) : flatNode.showCheckbox;
 
             // Render only if parent is expanded or if there is no root parent
             const parentExpanded = parent.value ? model.getNode(parent.value).expanded : true;
@@ -278,7 +278,7 @@ class CheckboxTree extends React.Component {
                     lang={lang}
                     optimisticToggle={optimisticToggle}
                     isHtml={node.isHtml}
-                    isLeaf={flatNode.isLeaf}
+                    isLeaf={flatNode && flatNode.isLeaf}
                     isParent={flatNode.isParent}
                     showCheckbox={showCheckbox}
                     showNodeIcon={showNodeIcon}
