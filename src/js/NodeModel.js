@@ -35,18 +35,22 @@ class NodeModel {
         nodes.forEach((node, index) => {
             const isParent = this.nodeHasChildren(node);
 
-            this.flatNodes[node.value] = {
-                label: node.label,
-                value: node.value,
-                children: node.children,
-                parent,
-                isParent,
-                isLeaf: !isParent,
-                showCheckbox: node.showCheckbox !== undefined ? node.showCheckbox : true,
-                disabled: this.getDisabledState(node, parent, disabled, noCascade),
-                treeDepth: depth,
-                index,
-            };
+            if (!this.flatNodes[node.value]) {
+                this.flatNodes[node.value] = {
+                    label: node.label,
+                    value: node.value,
+                    children: node.children,
+                    parent,
+                    isParent,
+                    isLeaf: !isParent,
+                    showCheckbox: node.showCheckbox !== undefined ? node.showCheckbox : true,
+                    disabled: this.getDisabledState(node, parent, disabled, noCascade),
+                    treeDepth: depth,
+                    index,
+                };
+            } else {
+                this.flatNodes[node.value].children = [...this.flatNodes[node.value].children, ...node.children]
+            }
             this.flattenNodes(node.children, node, depth + 1);
         });
     }
