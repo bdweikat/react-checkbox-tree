@@ -49,7 +49,8 @@ class NodeModel {
                     index,
                 };
             } else {
-                this.flatNodes[node.value].children = [...this.flatNodes[node.value].children, ...node.children]
+                const children = this.flatNodes[node.value].children || [];
+                this.flatNodes[node.value].children = [...children, ...node.children]
             }
             this.flattenNodes(node.children, node, depth + 1);
         });

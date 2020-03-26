@@ -1,4 +1,4 @@
-# react-checkbox-tree
+# @r365/react-checkbox-tree
 
 [![npm](https://img.shields.io/npm/v/react-checkbox-tree.svg?style=flat-square)](https://www.npmjs.com/package/react-checkbox-tree)
 [![Build Status](https://img.shields.io/travis/jakezatecky/react-checkbox-tree/master.svg?style=flat-square)](https://travis-ci.org/jakezatecky/react-checkbox-tree)
@@ -18,13 +18,13 @@
 Install the library using your favorite dependency manager:
 
 ```
-yarn add react-checkbox-tree
+yarn add @r365/react-checkbox-tree
 ```
 
 Using npm:
 
 ```
-npm install react-checkbox-tree --save
+npm install @r365/react-checkbox-tree --save
 ```
 
 > **Note** &ndash; This library makes use of [Font Awesome](http://fontawesome.io/) styles and expects them to be loaded in the browser.
@@ -34,14 +34,14 @@ npm install react-checkbox-tree --save
 
 For your convenience, the library's styles can be consumed utilizing one of the following files:
 
-* `node_modules/react-checkbox-tree/lib/react-checkbox-tree.css`
-* `node_modules/react-checkbox-tree/src/less/react-checkbox-tree.less`
-* `node_modules/react-checkbox-tree/src/scss/react-checkbox-tree.scss`
+* `node_modules/@r365/react-checkbox-tree/lib/react-checkbox-tree.css`
+* `node_modules/@r365/react-checkbox-tree/src/less/react-checkbox-tree.less`
+* `node_modules/@r365/react-checkbox-tree/src/scss/react-checkbox-tree.scss`
 
 Either include one of these files in your stylesheets or utilize a CSS loader:
 
 ``` javascript
-import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import '@r365/react-checkbox-tree/lib/react-checkbox-tree.css';
 ```
 
 
@@ -51,7 +51,7 @@ A quick usage example is included below. Note that the react-checkbox-tree compo
 
 ``` jsx
 import React from 'react';
-import CheckboxTree from 'react-checkbox-tree';
+import CheckboxTree from '@r365/react-checkbox-tree';
 
 const nodes = [{
     value: 'mars',
@@ -86,7 +86,7 @@ All node objects **must** have a unique `value`. This value is serialized into t
 
 #### Changing the Default Icons
 
-By default, **react-checkbox-tree** uses Font Awesome for the various icons that appear in the tree. To change the defaults, simply pass in the `icons` property and override the defaults. Note that you can override as many or as little icons as you like:
+By default, **@r365/react-checkbox-tree** uses Font Awesome for the various icons that appear in the tree. To change the defaults, simply pass in the `icons` property and override the defaults. Note that you can override as many or as little icons as you like:
 
 ``` jsx
 <CheckboxTree
