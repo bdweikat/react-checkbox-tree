@@ -50,7 +50,8 @@ class NodeModel {
                 };
             } else {
                 const children = this.flatNodes[node.value].children || [];
-                this.flatNodes[node.value].children = [...children, ...node.children]
+                const nodeChildren = node.children || [];
+                this.flatNodes[node.value].children = [...children, ...nodeChildren];
             }
             this.flattenNodes(node.children, node, depth + 1);
         });
