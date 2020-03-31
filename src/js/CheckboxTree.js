@@ -15,7 +15,7 @@ import nodeShape from './shapes/nodeShape';
 class CheckboxTree extends React.Component {
     static propTypes = {
         nodes: PropTypes.arrayOf(nodeShape).isRequired,
-
+        isTreeExpanded: PropTypes.bool,
         checked: listShape,
         checkedParents: listShape,
         disabled: PropTypes.bool,
@@ -42,6 +42,7 @@ class CheckboxTree extends React.Component {
 
     static defaultProps = {
         checked: [],
+        isTreeExpanded: false,
         checkedParents: [],
         disabled: false,
         expandDisabled: false,
@@ -103,6 +104,13 @@ class CheckboxTree extends React.Component {
         this.onExpandAll = this.onExpandAll.bind(this);
         this.onCollapseAll = this.onCollapseAll.bind(this);
         this.onToggleSelection = this.onToggleSelection.bind(this);
+        props.isTreeExpanded && this.expandAllNodes();
+    }
+
+    componentDidUpdate(prevProps){
+        if (this.props.isTreeExpanded != prevProps.isTreeExpanded) {
+            this.expandAllNodes(this.props.isTreeExpanded);
+        }
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -116,7 +124,7 @@ class CheckboxTree extends React.Component {
 
         // Since flattening nodes is an expensive task, only update when there is a node change
         if (!isEqual(prevProps.nodes, nodes) || prevProps.disabled !== disabled) {
-            model.flattenNodes(nodes);
+            model.resetAndFlattenNodes(nodes);
         }
 
         if (id !== null) {

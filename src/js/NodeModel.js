@@ -24,6 +24,11 @@ class NodeModel {
         return this.flatNodes[value];
     }
 
+    resetAndFlattenNodes(nodes, parent = {}, depth = 0) {
+        this.flatNodes = {};
+        this.flattenNodes(nodes, parent, depth);
+    }
+
     flattenNodes(nodes, parent = {}, depth = 0) {
         if (!Array.isArray(nodes) || nodes.length === 0) {
             return;
