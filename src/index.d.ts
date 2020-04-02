@@ -34,6 +34,7 @@ declare module "@r365/react-checkbox-tree" {
     interface CheckboxProps {
         nodes: Array<Node>;
         checked: Array<string>;
+        checkedParents: Array<string>;
         expanded: Array<string>;
         onCheck: (checked: Array<string>) => void;
         onExpand: (expanded: Array<string>) => void;
