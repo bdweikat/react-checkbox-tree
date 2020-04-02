@@ -38,7 +38,7 @@ declare module "@r365/react-checkbox-tree" {
         expanded: Array<string>;
         onCheck: (checked: Array<string>) => void;
         onExpand: (expanded: Array<string>) => void;
-
+        isTreeExpanded: boolean;
         disabled?: boolean;
         expandDisabled?: boolean;
         expandOnClick?: boolean;
@@ -55,6 +55,7 @@ declare module "@r365/react-checkbox-tree" {
         showNodeIcon?: boolean;
         showNodeTitle?: boolean;
         onClick?: (event: { checked: boolean, value: any }) => void;
+        onToggleSelection: (checkedParents: Array<string>, checked: Array<string>) => void;
     }
 
     export default class CheckboxTree extends React.Component<CheckboxProps> { }
