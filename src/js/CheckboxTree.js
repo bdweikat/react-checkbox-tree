@@ -38,6 +38,7 @@ class CheckboxTree extends React.Component {
         onClick: PropTypes.func,
         onExpand: PropTypes.func,
         onToggleSelection: PropTypes.func,
+        allowDisabledNodeAutoChange: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -75,6 +76,7 @@ class CheckboxTree extends React.Component {
         showExpandAll: false,
         showNodeIcon: true,
         showNodeTitle: false,
+        allowDisabledNodeAutoChange: false,
         onCheck: () => {},
         onClick: null,
         onExpand: () => {},
@@ -140,22 +142,22 @@ class CheckboxTree extends React.Component {
     }
 
     onCheck(nodeInfo) {
-        const { noCascade, onCheck } = this.props;
+        const { noCascade, onCheck, allowDisabledNodeAutoChange } = this.props;
         const model = this.state.model.clone();
         const node = model.getNode(nodeInfo.value);
 
-        model.toggleChecked(nodeInfo, nodeInfo.checked, noCascade);
+        model.toggleChecked(nodeInfo, nodeInfo.checked, noCascade, false, allowDisabledNodeAutoChange);
         onCheck(model.serializeList('checked'), { ...node, ...nodeInfo });
 
         if(!nodeInfo.checked){
             //Deselected one of the items
             if(node && !node.isLeaf){
-                model.toggleChecked(nodeInfo, false, false, false);
+                model.toggleChecked(nodeInfo, false, false, false, allowDisabledNodeAutoChange);
             }
             let hasParentNode = node && node.isParent;
             let parentNode = node && node.parent;
             while(hasParentNode){
-                model.toggleChecked(parentNode, false, false, false);
+                model.toggleChecked(parentNode, false, false, false, allowDisabledNodeAutoChange);
                 hasParentNode = parentNode.isParent;
                 parentNode = parentNode.parent;
             }
@@ -172,12 +174,12 @@ class CheckboxTree extends React.Component {
     }
 
     onToggleSelection(nodeInfo) {
-        const {onToggleSelection} = this.props;
+        const {onToggleSelection, allowDisabledNodeAutoChange} = this.props;
         const model = this.state.model.clone();
         const node = model.getNode(nodeInfo.value);
         //model.toggleNode(nodeInfo.value, 'checkedParents', nodeInfo.checkedParents);
         const allChildrenChecked = this.isEveryChildChecked(node);
-        model.toggleChecked(nodeInfo, !allChildrenChecked, false, true);
+        model.toggleChecked(nodeInfo, !allChildrenChecked, false, true, allowDisabledNodeAutoChange);
         onToggleSelection(model.serializeList('checkedParents'),model.serializeList('checked'), { ...node, ...nodeInfo },  { ...node, ...nodeInfo })
     }
 
