@@ -54,6 +54,7 @@ declare module "@r365/react-checkbox-tree" {
         showExpandAll?: boolean;
         showNodeIcon?: boolean;
         showNodeTitle?: boolean;
+        allowDisabledNodeAutoChange?: boolean;
         onClick?: (event: { checked: boolean, value: any }) => void;
         onToggleSelection: (checkedParents: Array<string>, checked: Array<string>) => void;
     }
